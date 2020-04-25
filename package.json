@@ -1,0 +1,22 @@
+a{
+  "name": "mandelbrot-web",
+  "version": "1.0.0",
+  "description": "Mandelbrot Set on the Web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flxsu/mandelbrot-web.git"
+  },
+  "author": "flxsu",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/flxsu/mandelbrot-web/issues"
+  },
+  "homepage": "https://github.com/flxsu/mandelbrot-web#readme",
+  "devDependencies": {
+    "parcel": "^2.0.0-alpha.3.2"
+  }
+}
