@@ -60,7 +60,8 @@ const high_end_device = navigator.hardwareConcurrency > 4
 const worker_num = navigator.hardwareConcurrency * (high_end_device ? 2 : 1)
 // const worker_num = 6
 const task_num = high_end_device ? 44 : 16
-const axis_length = 4
-const instance = new Config(iterations, zoom_factor, worker_num, task_num, axis_length)
+// TODO: implement zoom
+const axis_length_y = 4
+const instance = new Config(iterations, zoom_factor, worker_num, task_num, axis_length_y)
 
 export default instance
