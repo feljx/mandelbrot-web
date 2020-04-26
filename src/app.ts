@@ -1,6 +1,6 @@
 import config, { ConfigI } from './config'
 import debounce from './debounce'
-import { Task, Queue } from './queue'
+import { Task, Queue, QueueR } from './queue'
 import throttle from './throttle'
 
 // @ts-ignore
@@ -34,7 +34,7 @@ const context = canvas.getContext('2d')
 let pixel_data: ImageData
 let pixel_buffer: Uint32Array
 let workers: Worker[] = []
-const task_queue = new Queue()
+const task_queue = new QueueR()
 
 function init () {
 	// canvas.width = config.width * scale
@@ -159,6 +159,7 @@ function render () {
 		config.pixel_length
 	)
 	task_queue.enq(last_task)
+	task_queue.shuffle()
 
 	// initiate worker queue
 	for (const worker of workers) {
@@ -220,7 +221,7 @@ const zoom_throttled = throttle(function (ev: WheelEvent) {
 		}
 		// console.log(e.clientX, e.clientY)
 	}
-}, 800)
+}, 50)
 
 const debounced_zoom = debounce(
 	function (ev: WheelEvent) {

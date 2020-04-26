@@ -69,3 +69,32 @@ export class Queue {
 		}
 	}
 }
+
+export class QueueR {
+	private arr: Task[]
+	constructor () {
+		this.arr = []
+	}
+	public enq (val: Task) {
+		if (val) {
+			this.arr.push(val)
+		}
+	}
+	public deq () {
+		if (this.arr[0]) {
+			return this.arr.shift()
+		}
+	}
+	public peek () {
+		return this.arr[0]
+	}
+	public clear () {
+		this.arr.length = 0
+	}
+	public shuffle () {
+		for (let i = this.arr.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1))
+			;[ this.arr[i], this.arr[j] ] = [ this.arr[j], this.arr[i] ]
+		}
+	}
+}

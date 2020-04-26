@@ -50,8 +50,9 @@ function calc_mandelbrot (
 
 	// OPTIMIZATION LOOKAHEAD
 	let is_black_square = true
+	const step = 3
 	// outer columns (constant x inside loop, iterate through all columns in column)
-	for (let y = top; y < bot; y += 2) {
+	for (let y = top; y < bot; y += step) {
 		const xs = [ left, right - 1 ]
 		for (const x of xs) {
 			/* initial z = 0.0 + 0.0i */
@@ -79,12 +80,13 @@ function calc_mandelbrot (
 			// if max_iter surpassed -> pixel is in Mandelbrot set
 			if (iter < max_iter) {
 				is_black_square = false
+				break
 			}
 		}
 	}
 
 	// outer columns (constant y inside loop, iterate through all columns in column)
-	for (let x = left; x < right; x += 2) {
+	for (let x = left; x < right; x += step) {
 		const ys = [ top, bot - 1 ]
 		for (const y of ys) {
 			/* initial z = 0.0 + 0.0i */
@@ -112,6 +114,7 @@ function calc_mandelbrot (
 			// if max_iter surpassed -> pixel is in Mandelbrot set
 			if (iter < max_iter) {
 				is_black_square = false
+				break
 			}
 		}
 	}
