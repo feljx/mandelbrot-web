@@ -77,7 +77,7 @@ function load_workers (mod: WebAssembly.Module) {
 
 			if (!!task_queue.peek()) {
 				const task = task_queue.deq()
-				task && worker.postMessage(task)
+				worker.postMessage(task)
 			}
 			else {
 				if (!calc_done) {

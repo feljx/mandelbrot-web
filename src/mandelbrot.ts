@@ -49,7 +49,6 @@ function calc_mandelbrot (
 	const pixel_num = (right - left) * (bot - top)
 
 	// OPTIMIZATION LOOKAHEAD
-	let is_black_square = true
 	const step = 3
 	// outer columns (constant x inside loop, iterate through all columns in column)
 	for (let y = top; y < bot; y += step) {
@@ -79,8 +78,8 @@ function calc_mandelbrot (
 			}
 			// if max_iter surpassed -> pixel is in Mandelbrot set
 			if (iter < max_iter) {
-				is_black_square = false
-				break
+				const uint32_view = new Uint32Array(pixel_num).fill(0xff00ff00)
+				return new Uint8ClampedArray(uint32_view.buffer)
 			}
 		}
 	}
@@ -113,18 +112,11 @@ function calc_mandelbrot (
 			}
 			// if max_iter surpassed -> pixel is in Mandelbrot set
 			if (iter < max_iter) {
-				is_black_square = false
-				break
+				const uint32_view = new Uint32Array(pixel_num).fill(0xff00ff00)
+				return new Uint8ClampedArray(uint32_view.buffer)
 			}
 		}
 	}
-
-	// BLACK SQUARE
-	if (is_black_square) {
-		const uint32_view = new Uint32Array(pixel_num).fill(0xff000000)
-		return new Uint8ClampedArray(uint32_view.buffer)
-	}
-
 	// MAIN (full) ITERATION
 	const pixel_bytes = new Uint8ClampedArray(pixel_num * 4)
 	let pixel_idx = 0
