@@ -1,0 +1,7 @@
+div {
+	text-align: center;
+}
+canvas {
+	background: rgba(15, 26, 56, 0.98);
+	/* border: 2px solid black; */
+}

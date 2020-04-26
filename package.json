@@ -1,22 +1,29 @@
-a{
-  "name": "mandelbrot-web",
-  "version": "1.0.0",
-  "description": "Mandelbrot Set on the Web",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/flxsu/mandelbrot-web.git"
-  },
-  "author": "flxsu",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/flxsu/mandelbrot-web/issues"
-  },
-  "homepage": "https://github.com/flxsu/mandelbrot-web#readme",
-  "devDependencies": {
-    "parcel": "^2.0.0-alpha.3.2"
-  }
+{
+	"name": "mandelbrot-web",
+	"version": "1.0.0",
+	"description": "Mandelbrot Set on the Web",
+	"main": "index.html",
+	"scripts": {
+		"test": "npx parcel serve src/app.ts src/index.html",
+		"build": "npx parcel build src/app.ts src/index.html"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/flxsu/mandelbrot-web.git"
+	},
+	"author": "flxsu",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/flxsu/mandelbrot-web/issues"
+	},
+	"homepage": "https://github.com/flxsu/mandelbrot-web#readme",
+	"dependencies": {
+		"@queso/debounce": "^1.1.0",
+		"flatqueue": "^1.2.0",
+		"heapify": "^0.2.1",
+		"throttled-queue": "^1.0.7"
+	},
+	"devDependencies": {
+		"parcel": "^2.0.0-alpha.3.2"
+	}
 }
