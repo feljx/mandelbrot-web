@@ -1,36 +1,22 @@
-import { ConfigI } from './config'
-import calc_mandelbrot_ts from './mandelbrot'
-import { Task } from './queue'
+import { Config } from './config'
+import { Task } from './main'
+import mandel_ts from '../mandel/mandel'
 
-interface WorkerData {
-	readonly message: string
-	readonly module_buffer?: WebAssembly.Module
-	readonly config?: ConfigI
-	readonly pixel_length?: number
-	readonly worker_num?: number
-	readonly worker_idx?: number
-	readonly idx_start?: number
-	readonly idx_end?: number
+interface Message {
+	config: Config
+	mod: WebAssembly.Module
 }
 
-type mandelbrot_c = (
-	width: number,
-	height: number,
-	pixel_length: number,
-	max_iter: number,
-	worker_num: number,
-	worker_idx: number
-) => number
+let config: Config
+let mod: WebAssembly.Module
 
-let config: ConfigI
-
-function calc (ev: MessageEvent) {
+function calc(ev: MessageEvent) {
 	const task: Task = ev.data
-	const pixel_bytes = calc_mandelbrot_ts(
-		config.real_width,
-		config.real_height,
-		task.pixel_length,
-		config.iterations,
+	const pixel_bytes = mandel_ts(
+		config.px_width,
+		config.px_height,
+		task.px_len,
+		config.iter_max,
 		task.top,
 		task.left,
 		task.bot,
@@ -39,16 +25,15 @@ function calc (ev: MessageEvent) {
 	task.bytes = pixel_bytes
 
 	// @ts-ignore
-	self.postMessage(task, [ task.bytes.buffer ])
+	self.postMessage(task, [task.bytes.buffer])
 }
 
-function handle_first_message (ev: MessageEvent) {
-	const _config: ConfigI = ev.data
-	config = _config
+self.onmessage = function handle_first_message(ev: MessageEvent) {
+	// assign global config
+	[config, mod] = ev.data
+	// replace message handler
 	self.onmessage = calc
 }
-
-self.onmessage = handle_first_message
 
 // // instantiate wasm module
 // WebAssembly.instantiate(data.module_buffer, {}).then(function (instance) {

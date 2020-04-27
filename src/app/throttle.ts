@@ -1,6 +1,7 @@
 // Throttle.
 
-function throttle (func: Function, limit: number) {
+function throttle(func: Function, limit: number) {
+	// @ts-ignore
 	let inThrottle: NodeJS.Timeout | boolean
 	return function (...args: any[]) {
 		if (!inThrottle) {

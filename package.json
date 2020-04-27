@@ -4,7 +4,7 @@
 	"description": "Mandelbrot Set on the Web",
 	"main": "index.html",
 	"scripts": {
-		"test": "npx parcel serve src/app.ts src/index.html",
+		"test": "npx parcel serve src/app/main.ts src/index.html",
 		"build": "cd docs && npx parcel build ../src/app.ts ../src/index.html"
 	},
 	"repository": {

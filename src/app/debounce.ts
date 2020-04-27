@@ -1,12 +1,12 @@
-function debounce (func: (ev: Event) => any, wait: number, immediate: boolean) {
-	var timeout: NodeJS.Timeout | number | null
+function debounce(func: (ev: Event) => any, wait: number, immediate: boolean) {
+	var timeout: number | null
 	let args: any
 	let context: any
 	let timestamp: any
 	let result: any
 	if (null == wait) wait = 100
 
-	function later () {
+	function later() {
 		var last = Date.now() - timestamp
 
 		if (last < wait && last >= 0) {

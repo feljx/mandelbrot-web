@@ -1,11 +1,11 @@
 // Convert rgb values to hex value
-function rgb_to_hex (r: number, g: number, b: number) {
+function rgb_to_hex(r: number, g: number, b: number) {
 	return 0xff000000 | ((r << 16) | (g << 8) | b)
 }
 
-const get_hex_color = get_color_fn([ 15, 26, 56 ], [ 255, 240, 200 ])
+const get_hex_color = get_color_fn([15, 26, 56], [255, 240, 200])
 
-function get_color_fn (color_1: number[], color_2: number[]) {
+function get_color_fn(color_1: number[], color_2: number[]) {
 	return function (n: number) {
 		// if (n < 0.7 && n > 0.5) {
 		// 	n = n * n * 2
@@ -13,21 +13,21 @@ function get_color_fn (color_1: number[], color_2: number[]) {
 		const dr = color_2[0] - color_1[0]
 		const dg = color_2[1] - color_1[1]
 		const db = color_2[2] - color_1[2]
-		const [ r, g, b ] = [
+		const [r, g, b] = [
 			dr * n + color_1[0],
 			dg * n + color_1[1],
 			db * n + color_1[2]
 		]
 		/* return rgb_to_hex(b, g, r) */
-		return [ r, g, b, 0xff ]
+		return [r, g, b, 0xff]
 	}
 }
 
-function coord_to_idx (width, x, y) {
+function coord_to_idx(width, x, y) {
 	return x + y * width
 }
 
-function set_red (width, x, y, byte_array) {
+function set_red(width, x, y, byte_array) {
 	const idx = coord_to_idx(width, x, y)
 	byte_array[idx] = 0xff
 	byte_array[idx + 1] = 0x00
@@ -35,7 +35,7 @@ function set_red (width, x, y, byte_array) {
 	byte_array[idx + 3] = 0xff
 }
 
-function calc_mandelbrot (
+function calc_mandelbrot(
 	total_width: number,
 	total_height: number,
 	pixel_length: number,
@@ -49,10 +49,11 @@ function calc_mandelbrot (
 	const pixel_num = (right - left) * (bot - top)
 
 	// OPTIMIZATION LOOKAHEAD
+	let is_black = true
 	const step = 3
 	// outer columns (constant x inside loop, iterate through all columns in column)
 	for (let y = top; y < bot; y += step) {
-		const xs = [ left, right - 1 ]
+		const xs = [left, right - 1]
 		for (const x of xs) {
 			/* initial z = 0.0 + 0.0i */
 			let z_re = 0.0
@@ -78,15 +79,15 @@ function calc_mandelbrot (
 			}
 			// if max_iter surpassed -> pixel is in Mandelbrot set
 			if (iter < max_iter) {
-				const uint32_view = new Uint32Array(pixel_num).fill(0xff00ff00)
-				return new Uint8ClampedArray(uint32_view.buffer)
+				is_black = false
+				break
 			}
 		}
 	}
 
 	// outer columns (constant y inside loop, iterate through all columns in column)
 	for (let x = left; x < right; x += step) {
-		const ys = [ top, bot - 1 ]
+		const ys = [top, bot - 1]
 		for (const y of ys) {
 			/* initial z = 0.0 + 0.0i */
 			let z_re = 0.0
@@ -112,11 +113,18 @@ function calc_mandelbrot (
 			}
 			// if max_iter surpassed -> pixel is in Mandelbrot set
 			if (iter < max_iter) {
-				const uint32_view = new Uint32Array(pixel_num).fill(0xff00ff00)
-				return new Uint8ClampedArray(uint32_view.buffer)
+				is_black = false
+				break
 			}
 		}
 	}
+	// if no outline pixel violated the iteration check
+	if (is_black) {
+		// return array of black pixels
+		const uint32_view = new Uint32Array(pixel_num).fill(0xff000000)
+		return new Uint8ClampedArray(uint32_view.buffer)
+	}
+
 	// MAIN (full) ITERATION
 	const pixel_bytes = new Uint8ClampedArray(pixel_num * 4)
 	let pixel_idx = 0
@@ -149,7 +157,7 @@ function calc_mandelbrot (
 			/* pixels within are black 0xff000000, pixels outside are colored relative to number of iterations */
 			const rgba =
 				iter >= max_iter
-					? [ 0x00, 0x00, 0x00, 0xff ]
+					? [0x00, 0x00, 0x00, 0xff]
 					: get_hex_color(iter / max_iter * 40)
 			pixel_bytes[pixel_idx * 4] = rgba[0]
 			pixel_bytes[pixel_idx * 4 + 1] = rgba[1]
