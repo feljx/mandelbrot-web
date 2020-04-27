@@ -9,7 +9,7 @@ export function zoom_throttled(callback: Function) {
             zoom(config, config.zoom_fact + 1)
             console.log(`${config.zoom_fact * 100}% Zoom`)
             callback()
-            console.log(ev.clientX, ev.clientY)
+            // console.log(ev.clientX, ev.clientY)
         }
         else {
             // zoom out
@@ -18,7 +18,7 @@ export function zoom_throttled(callback: Function) {
                 console.log(`${config.zoom_fact * 100}% Zoom`)
                 callback()
             }
-            console.log(ev.clientX, ev.clientY)
+            // console.log(ev.clientX, ev.clientY)
         }
     }, 50)
 }

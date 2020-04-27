@@ -3,11 +3,11 @@ function rgb_to_hex(r: number, g: number, b: number) {
 	return 0xff000000 | ((r << 16) | (g << 8) | b)
 }
 
-const get_hex_color = get_color_fn([15, 26, 56], [255, 240, 200])
+const get_hex_color = get_color_fn([11, 18, 43], [255, 79, 117])
 
 function get_color_fn(color_1: number[], color_2: number[]) {
 	return function (n: number) {
-		// if (n < 0.7 && n > 0.5) {
+		// if (n < 0.5 && n > 0.5) {
 		// 	n = n * n * 2
 		// }
 		const dr = color_2[0] - color_1[0]
@@ -130,8 +130,10 @@ function calc_mandelbrot(
 	const pixel_bytes = new Uint8ClampedArray(pixel_num * 4)
 	// MINI OPTIMIZATION
 	// complex constants
-	const dre = (1 + 0.5 - total_width / 2.0) * pixel_length
-	const dim = (total_height / 2.0 - 1 + 0.5) * pixel_length
+	const c_re_0 = (0 + 0.5 - total_width / 2) * pixel_length
+	const c_im_0 = (total_height / 2 - 0 + 0.5) * pixel_length
+	const dre = (1 + 0.5 - total_width / 2) * pixel_length - c_re_0
+	const dim = (total_height / 2 - 1 + 0.5) * pixel_length - c_im_0
 	let pixel_idx = 0
 	/* loop through pixels in task */
 	for (let y = top; y < bot; y++) {
@@ -143,8 +145,8 @@ function calc_mandelbrot(
 			let z_re_sq = 0.0
 			let z_im_sq = 0.0
 			/* c constant is determined using pixel coordinate */
-			const c_re = (x + 0.5 - total_width / 2.0) * pixel_length
-			const c_im = (total_height / 2.0 - y + 0.5) * pixel_length
+			const c_re = c_re_0 + dre * x
+			const c_im = c_im_0 + dim * y
 			/* do max_iter iterations per pixel coordinate */
 			let iter = 0
 			/* while sum of z is below infinity boundary 4 */
@@ -163,7 +165,7 @@ function calc_mandelbrot(
 			const rgba =
 				iter >= max_iter
 					? [0x00, 0x00, 0x00, 0xff]
-					: get_hex_color(iter / max_iter * 40)
+					: get_hex_color(2 ** (iter / max_iter))
 			pixel_bytes[pixel_idx * 4] = rgba[0]
 			pixel_bytes[pixel_idx * 4 + 1] = rgba[1]
 			pixel_bytes[pixel_idx * 4 + 2] = rgba[2]

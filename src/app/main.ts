@@ -55,7 +55,7 @@ function load_workers(mod: WebAssembly.Module) {
 				if (!render_done) {
 					render_done = true
 					// DEBUG: end render time stopwatch
-					// console.timeEnd()
+					console.timeEnd()
 				}
 			}
 		})
@@ -72,7 +72,7 @@ function px_coord_to_idx() { }
 
 function render() {
 	// DEBUG: Measure time for each render
-	// console.time()
+	console.time()
 	// set global state calc_done to false
 	render_done = false
 	// clear task queue
