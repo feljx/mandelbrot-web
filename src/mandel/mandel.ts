@@ -165,7 +165,7 @@ function calc_mandelbrot(
 			const rgba =
 				iter >= max_iter
 					? [0x00, 0x00, 0x00, 0xff]
-					: get_hex_color(2 ** (iter / max_iter))
+					: get_hex_color((iter / max_iter))
 			pixel_bytes[pixel_idx * 4] = rgba[0]
 			pixel_bytes[pixel_idx * 4 + 1] = rgba[1]
 			pixel_bytes[pixel_idx * 4 + 2] = rgba[2]
