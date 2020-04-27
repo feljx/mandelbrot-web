@@ -9,7 +9,7 @@ export function zoom_throttled(callback: Function) {
             zoom(config, config.zoom_fact + 1)
             console.log(`${config.zoom_fact * 100}% Zoom`)
             callback()
-            // console.log(e.clientX, e.clientY)
+            console.log(ev.clientX, ev.clientY)
         }
         else {
             // zoom out
@@ -18,7 +18,7 @@ export function zoom_throttled(callback: Function) {
                 console.log(`${config.zoom_fact * 100}% Zoom`)
                 callback()
             }
-            // console.log(e.clientX, e.clientY)
+            console.log(ev.clientX, ev.clientY)
         }
     }, 50)
 }
@@ -32,7 +32,7 @@ export function debounced_zoom(callback: Function) {
             zoom(config, config.zoom_fact + 1)
             console.log(config.zoom_fact)
             callback()
-            // console.log(e.clientX, e.clientY)
+            console.log(ev.clientX, ev.clientY)
         }
         else {
             // zoom out
@@ -42,7 +42,7 @@ export function debounced_zoom(callback: Function) {
                 console.log(config.zoom_fact)
                 callback()
             }
-            // console.log(e.clientX, e.clientY)
+            console.log(ev.clientX, ev.clientY)
         }
     },
         1000,

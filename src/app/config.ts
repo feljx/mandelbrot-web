@@ -12,14 +12,14 @@ const INITIAL_ARGS: ConstructorArgs = [ITER_MAX, ZOOM_FACT, WORKER_NUM, TASK_NUM
 // Implementation
 export class Config {
 	public iter_max: number
+	public zoom_fact: number
 	public px_width: number
 	public px_height: number
 	public px_num: number
-	public px_len: number
+	public px_ax_len: number
 	public axis_len_x: number
 	public axis_len_y: number
 	public worker_num: number
-	public zoom_fact: number
 	public task_num: number
 
 	constructor(
@@ -31,26 +31,21 @@ export class Config {
 	) {
 		this.iter_max = iter_max
 		this.zoom_fact = zoom_fact
-		this.worker_num = worker_num
-		this.task_num = task_num
-		this.axis_len_y = axis_len_y
 		this.px_width = ~~(window.innerWidth * window.devicePixelRatio)
 		this.px_height = ~~(window.innerHeight * window.devicePixelRatio)
 		this.px_num = this.px_width * this.px_height
-
+		this.px_ax_len = axis_len_y / this.px_height
 		this.axis_len_x = axis_len_y * (this.px_width / this.px_height)
-		this.px_len =
-			this.axis_len_y /
-			this.px_height /
-			Math.max(this.zoom_fact - 1, 1) *
-			0.8
+		this.axis_len_y = axis_len_y
+		this.worker_num = worker_num
+		this.task_num = task_num
 	}
 }
 
 export function zoom(c: Config, n: number) {
 	c.zoom_fact = n
-	c.px_len = Math.abs(
-		c.axis_len_y / c.px_height / c.zoom_fact
+	c.px_ax_len = Math.abs(
+		c.axis_len_y / c.px_height / 1.16 ** (c.zoom_fact - 1)
 	)
 }
 

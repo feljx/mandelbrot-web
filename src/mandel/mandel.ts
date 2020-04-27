@@ -48,6 +48,7 @@ function calc_mandelbrot(
 	/* number of pixels is pixels between vertex coordinates */
 	const pixel_num = (right - left) * (bot - top)
 
+
 	// OPTIMIZATION LOOKAHEAD
 	let is_black = true
 	const step = 3
@@ -127,6 +128,10 @@ function calc_mandelbrot(
 
 	// MAIN (full) ITERATION
 	const pixel_bytes = new Uint8ClampedArray(pixel_num * 4)
+	// MINI OPTIMIZATION
+	// complex constants
+	const dre = (1 + 0.5 - total_width / 2.0) * pixel_length
+	const dim = (total_height / 2.0 - 1 + 0.5) * pixel_length
 	let pixel_idx = 0
 	/* loop through pixels in task */
 	for (let y = top; y < bot; y++) {

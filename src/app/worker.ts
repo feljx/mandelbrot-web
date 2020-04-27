@@ -1,5 +1,5 @@
 import { Config } from './config'
-import { Task } from './main'
+import { Task } from './queue'
 import mandel_ts from '../mandel/mandel'
 
 interface Message {
@@ -15,7 +15,7 @@ function calc(ev: MessageEvent) {
 	const pixel_bytes = mandel_ts(
 		config.px_width,
 		config.px_height,
-		task.px_len,
+		task.px_ax_len,
 		config.iter_max,
 		task.top,
 		task.left,
