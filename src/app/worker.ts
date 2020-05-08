@@ -10,7 +10,7 @@ interface Message {
 let config: Config
 let mod: WebAssembly.Module
 
-function calc (ev: MessageEvent) {
+function calc(ev: MessageEvent) {
 	const tasks: Task[] = ev.data
 	const bufs: ArrayBuffer[] = []
 	for (const task of tasks) {
@@ -31,7 +31,7 @@ function calc (ev: MessageEvent) {
 	self.postMessage(tasks, bufs)
 }
 
-self.onmessage = function handle_first_message (ev: MessageEvent) {
+self.onmessage = function handle_first_message(ev: MessageEvent) {
 	// assign global config
 	;[ config, mod ] = ev.data
 	// replace message handler

@@ -3,17 +3,12 @@ const BEEFY_DEVICE = navigator.hardwareConcurrency > 4
 const ITER_MAX = 2000
 const ZOOM_FACT = 1
 const WORKER_NUM = navigator.hardwareConcurrency * (BEEFY_DEVICE ? 2 : 1)
-const TASK_NUM = BEEFY_DEVICE ? 64 : 8
+const TASK_NUM = BEEFY_DEVICE ? 48 : 8
+const BATCH_NUM = 4
 const AXIS_LEN_Y = 4
 // Constructor args
-type ConstructorArgs = [number, number, number, number, number]
-const INITIAL_ARGS: ConstructorArgs = [
-	ITER_MAX,
-	ZOOM_FACT,
-	WORKER_NUM,
-	TASK_NUM,
-	AXIS_LEN_Y
-]
+type ConstructorArgs = [number, number, number, number, number, number]
+const INITIAL_ARGS: ConstructorArgs = [ ITER_MAX, ZOOM_FACT, WORKER_NUM, TASK_NUM, BATCH_NUM, AXIS_LEN_Y ]
 
 // Implementation
 export class Config {
@@ -27,12 +22,14 @@ export class Config {
 	public axis_len_y: number
 	public worker_num: number
 	public task_num: number
+	public batch_num: number
 
-	constructor (
+	constructor(
 		iter_max: number,
 		zoom_fact: number,
 		worker_num: number,
 		task_num: number,
+		batch_num: number,
 		axis_len_y: number
 	) {
 		this.iter_max = iter_max
@@ -45,14 +42,15 @@ export class Config {
 		this.axis_len_y = axis_len_y
 		this.worker_num = worker_num
 		this.task_num = task_num
+		this.batch_num = batch_num
 	}
 }
 
-export function zoom (c: Config, n: number) {
+export function zoom(c: Config, n: number) {
 	c.zoom_fact = n
 	c.px_ax_len = Math.abs(c.axis_len_y / c.px_height / 1.16 ** (c.zoom_fact - 1))
 }
 
-export function move (c: Config, x: number, y: number) {}
+export function move(c: Config, x: number, y: number) {}
 
 export const instance = new Config(...INITIAL_ARGS)

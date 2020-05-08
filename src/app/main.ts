@@ -25,33 +25,29 @@ canvas.style.width = `${window.innerWidth}px`
 canvas.style.height = `${window.innerHeight}px`
 
 // LOAD WORKERS
-function load_workers (mod: WebAssembly.Module) {
+function load_workers(mod: WebAssembly.Module) {
 	// create workers
 	for (let i = 0; i < config.worker_num; i++) {
 		const worker = new Worker('./worker.ts', { type: 'module' })
 
 		// WORKER CALLBACK
-		function handle_msg (ev) {
-			const task: Task = ev.data
-			if (task.px_ax_len === config.px_ax_len) {
-				window.requestAnimationFrame(function () {
-					context.putImageData(
-						new ImageData(
-							task.bytes,
-							task.right - task.left,
-							task.bot - task.top
-						),
-						task.left,
-						task.top
-					)
-				})
+		function handle_msg(ev) {
+			const tasks: Task[] = ev.data
+			for (const task of tasks) {
+				if (task.px_ax_len === config.px_ax_len) {
+					window.requestAnimationFrame(function() {
+						context.putImageData(
+							new ImageData(task.bytes, task.right - task.left, task.bot - task.top),
+							task.left,
+							task.top
+						)
+					})
+				}
 			}
 			// if task queue is not empty
 			if (task_queue.peek()) {
-				const task = task_queue.deq()
-				worker.postMessage(task)
-			}
-			else {
+				worker.postMessage(task_queue.deq_n(config.batch_num))
+			} else {
 				// set global render_done variable to true
 				if (!render_done) {
 					render_done = true
@@ -69,10 +65,10 @@ function load_workers (mod: WebAssembly.Module) {
 }
 
 // RENDER
-function px_idx_to_coord () {}
-function px_coord_to_idx () {}
+function px_idx_to_coord() {}
+function px_coord_to_idx() {}
 
-function render () {
+function render() {
 	// DEBUG: Measure time for each render
 	console.time()
 	// set global state calc_done to false
@@ -86,7 +82,7 @@ function render () {
 	// START QUEUE
 	for (const worker of workers) {
 		if (task_queue.peek()) {
-			worker.postMessage(task_queue.deq_n(3))
+			worker.postMessage(task_queue.deq_n(config.batch_num))
 		}
 	}
 }
@@ -95,7 +91,7 @@ function render () {
 window.addEventListener('wheel', zoom_throttled(render))
 
 // MAIN ENTRY POINT
-wasm_has_compiled.then(function (mod) {
+wasm_has_compiled.then(function(mod) {
 	load_workers(mod)
 	render()
 })

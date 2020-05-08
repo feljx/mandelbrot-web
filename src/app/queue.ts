@@ -1,12 +1,5 @@
 import { instance as config } from './config'
 
-function shuffleArray (array: any[]) {
-	for (let i = array.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1))
-		;[ array[i], array[j] ] = [ array[j], array[i] ]
-	}
-}
-
 type QueueItem = null | {
 	next: QueueItem
 	val: Task
@@ -14,20 +7,20 @@ type QueueItem = null | {
 
 export class QueueR {
 	private arr: Task[]
-	constructor () {
+	constructor() {
 		this.arr = []
 	}
-	public enq (vals: Task[]) {
+	public enq(vals: Task[]) {
 		if (vals) {
 			this.arr.push(...vals)
 		}
 	}
-	public deq (): Task {
+	public deq(): Task {
 		if (this.arr[0]) {
 			return this.arr.shift()
 		}
 	}
-	public deq_n (n: number): Task[] {
+	public deq_n(n: number): Task[] {
 		const elms = []
 		for (let i = 0; i < n; i++) {
 			if (this.arr[0]) {
@@ -36,16 +29,16 @@ export class QueueR {
 		}
 		return elms
 	}
-	public peek () {
+	public peek() {
 		return this.arr[0]
 	}
-	public clear () {
+	public clear() {
 		this.arr.length = 0
 	}
-	public len () {
+	public len() {
 		return this.arr.length
 	}
-	public shuffle () {
+	public shuffle() {
 		for (let i = this.arr.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1))
 			;[ this.arr[i], this.arr[j] ] = [ this.arr[j], this.arr[i] ]
@@ -73,18 +66,12 @@ export interface Task {
 	bytes: Uint8ClampedArray
 }
 
-export function Task (
-	px_ax_len: number,
-	top: number,
-	left: number,
-	bot: number,
-	right: number
-): Task {
+export function Task(px_ax_len: number, top: number, left: number, bot: number, right: number): Task {
 	return { px_ax_len, bytes: null, top, left, bot, right }
 }
 
 // CREATE TASKS
-export function create_tasks (): Task[] {
+export function create_tasks(): Task[] {
 	// top = first pixel y at task_length index
 	// left = first pixel x at task_length index
 	// bot = last pixel y before next task
