@@ -2,10 +2,16 @@
 	"name": "mandelbrot-web",
 	"version": "1.0.3",
 	"description": "Mandelbrot Set on the Web",
-	"main": "index.html",
+	"main": "docs/index.html",
+	"targets": {
+		"main": {
+			"context": "browser",
+			"publicUrl": "."
+		}
+	},
 	"scripts": {
-		"test": "npx parcel serve src/app/main.ts src/index.html",
-		"build": "cd docs && npx parcel build ../src/app.ts ../src/index.html"
+		"test": "npx parcel serve src/index.html",
+		"build": "npx parcel build src/index.html"
 	},
 	"repository": {
 		"type": "git",
@@ -24,6 +30,7 @@
 		"throttled-queue": "^1.0.7"
 	},
 	"devDependencies": {
+		"jest": "^26.0.1",
 		"parcel": "^2.0.0-alpha.3.2"
 	}
 }

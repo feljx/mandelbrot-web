@@ -25,12 +25,13 @@ canvas.style.width = `${window.innerWidth}px`
 canvas.style.height = `${window.innerHeight}px`
 
 // LOAD WORKERS
-function load_workers(mod: WebAssembly.Module) {
+function load_workers (mod: WebAssembly.Module) {
 	// create workers
 	for (let i = 0; i < config.worker_num; i++) {
 		const worker = new Worker('./worker.ts', { type: 'module' })
+
 		// WORKER CALLBACK
-		worker.addEventListener('message', function (ev) {
+		function handle_msg (ev) {
 			const task: Task = ev.data
 			if (task.px_ax_len === config.px_ax_len) {
 				window.requestAnimationFrame(function () {
@@ -58,19 +59,20 @@ function load_workers(mod: WebAssembly.Module) {
 					console.timeEnd()
 				}
 			}
-		})
+		}
+
+		worker.addEventListener('message', handle_msg)
 		// TODO: remove set_zoom method from config class
-		worker.postMessage([config, mod])
+		worker.postMessage([ config, mod ])
 		workers.push(worker)
 	}
 }
 
-
 // RENDER
-function px_idx_to_coord() { }
-function px_coord_to_idx() { }
+function px_idx_to_coord () {}
+function px_coord_to_idx () {}
 
-function render() {
+function render () {
 	// DEBUG: Measure time for each render
 	console.time()
 	// set global state calc_done to false
@@ -84,7 +86,7 @@ function render() {
 	// START QUEUE
 	for (const worker of workers) {
 		if (task_queue.peek()) {
-			worker.postMessage(task_queue.deq())
+			worker.postMessage(task_queue.deq_n(3))
 		}
 	}
 }

@@ -1,9 +1,9 @@
-import { instance as config } from "./config";
+import { instance as config } from './config'
 
-function shuffleArray(array: any[]) {
+function shuffleArray (array: any[]) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1))
-			;[array[i], array[j]] = [array[j], array[i]]
+		;[ array[i], array[j] ] = [ array[j], array[i] ]
 	}
 }
 
@@ -14,50 +14,77 @@ type QueueItem = null | {
 
 export class QueueR {
 	private arr: Task[]
-	constructor() {
+	constructor () {
 		this.arr = []
 	}
-	public enq(vals: Task[]) {
+	public enq (vals: Task[]) {
 		if (vals) {
 			this.arr.push(...vals)
 		}
 	}
-	public deq() {
+	public deq (): Task {
 		if (this.arr[0]) {
 			return this.arr.shift()
 		}
 	}
-	public peek() {
+	public deq_n (n: number): Task[] {
+		const elms = []
+		for (let i = 0; i < n; i++) {
+			if (this.arr[0]) {
+				elms.push(this.arr.shift())
+			}
+		}
+		return elms
+	}
+	public peek () {
 		return this.arr[0]
 	}
-	public clear() {
+	public clear () {
 		this.arr.length = 0
 	}
-	public len() {
+	public len () {
 		return this.arr.length
 	}
-	public shuffle() {
+	public shuffle () {
 		for (let i = this.arr.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1))
-				;[this.arr[i], this.arr[j]] = [this.arr[j], this.arr[i]]
+			;[ this.arr[i], this.arr[j] ] = [ this.arr[j], this.arr[i] ]
 		}
 	}
 }
 
+// export class Task {
+// 	bytes: Uint8ClampedArray
+// 	constructor (
+// 		public readonly px_ax_len: number,
+// 		public readonly top: number,
+// 		public readonly left: number,
+// 		public readonly bot: number,
+// 		public readonly right: number
+// 	) {}
+// }
 
-export class Task {
+export interface Task {
+	readonly px_ax_len: number
+	readonly top: number
+	readonly left: number
+	readonly bot: number
+	readonly right: number
 	bytes: Uint8ClampedArray
-	constructor(
-		public readonly px_ax_len: number,
-		public readonly top: number,
-		public readonly left: number,
-		public readonly bot: number,
-		public readonly right: number) { }
 }
 
+export function Task (
+	px_ax_len: number,
+	top: number,
+	left: number,
+	bot: number,
+	right: number
+): Task {
+	return { px_ax_len, bytes: null, top, left, bot, right }
+}
 
 // CREATE TASKS
-export function create_tasks(): Task[] {
+export function create_tasks (): Task[] {
 	// top = first pixel y at task_length index
 	// left = first pixel x at task_length index
 	// bot = last pixel y before next task
@@ -70,37 +97,43 @@ export function create_tasks(): Task[] {
 	// MOST TASKS
 	for (let y = 0; y < task_num_y - 1; y++) {
 		for (let x = 0; x < task_num_x - 1; x++) {
-			tasks.push(new Task(
-				config.px_ax_len,
-				y * task_len - 1,
-				x * task_len - 1,
-				(y + 1) * task_len - 1,
-				(x + 1) * task_len - 1
-			))
+			tasks.push(
+				Task(
+					config.px_ax_len,
+					y * task_len - 1,
+					x * task_len - 1,
+					(y + 1) * task_len - 1,
+					(x + 1) * task_len - 1
+				)
+			)
 		}
 	}
 	// LAST COLUMN EXCEPT LAST TASK
 	for (let y = 0; y < task_num_y - 1; y++) {
-		tasks.push(new Task(
-			config.px_ax_len,
-			y * task_len - 1,
-			config.px_width - task_len,
-			(y + 1) * task_len - 1,
-			config.px_width
-		))
+		tasks.push(
+			Task(
+				config.px_ax_len,
+				y * task_len - 1,
+				config.px_width - task_len,
+				(y + 1) * task_len - 1,
+				config.px_width
+			)
+		)
 	}
 	// LAST ROW EXCEPT LAST TASK
 	for (let x = 0; x < task_num_x - 1; x++) {
-		tasks.push(new Task(
-			config.px_ax_len,
-			config.px_height - task_len,
-			x * task_len - 1,
-			config.px_height,
-			(x + 1) * task_len - 1
-		))
+		tasks.push(
+			Task(
+				config.px_ax_len,
+				config.px_height - task_len,
+				x * task_len - 1,
+				config.px_height,
+				(x + 1) * task_len - 1
+			)
+		)
 	}
 	// LAST TASK
-	const last_task = new Task(
+	const last_task = Task(
 		config.px_ax_len,
 		(task_num_y - 1) * task_len - 1,
 		(task_num_x - 1) * task_len - 1,
@@ -111,12 +144,10 @@ export function create_tasks(): Task[] {
 	return tasks
 }
 
-
 export interface TaskMessage {
 	readonly task: Task
 	readonly px_len: number
 }
-
 
 // export class QueueL {
 // 	private head: QueueItem
