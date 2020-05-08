@@ -1,0 +1,1 @@
+{"mappings":"AAAA,IACA,iBACA,CACA,OACA,6BAEA","sources":["src/styles/styles.css"],"names":[],"version":3,"file":"styles.b27f333d.css.map","sourcesContent":["div {\n\ttext-align: center;\n}\ncanvas {\n\tbackground: rgba(15, 26, 56, 0.98);\n\t/* border: 2px solid black; */\n}\n"]}
