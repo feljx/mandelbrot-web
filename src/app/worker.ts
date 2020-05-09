@@ -11,24 +11,20 @@ let config: Config
 let mod: WebAssembly.Module
 
 function calc (ev: MessageEvent) {
-	const tasks: Task[] = ev.data
-	const bufs: ArrayBuffer[] = []
-	for (const task of tasks) {
-		const pixel_bytes = mandel_ts(
-			config.px_width,
-			config.px_height,
-			task.px_ax_len,
-			config.iter_max,
-			task.top,
-			task.left,
-			task.bot,
-			task.right
-		)
-		task.bytes = pixel_bytes
-		bufs.push(pixel_bytes.buffer)
-	}
+	const task: Task = ev.data
+	const pixel_bytes = mandel_ts(
+		config.px_width,
+		config.px_height,
+		task.px_ax_len,
+		config.iter_max,
+		task.top,
+		task.left,
+		task.bot,
+		task.right
+	)
+	task.bytes = pixel_bytes
 	// @ts-ignore
-	self.postMessage(tasks, bufs)
+	self.postMessage(task, [ task.bytes.buffer ])
 }
 
 self.onmessage = function handle_first_message (ev: MessageEvent) {

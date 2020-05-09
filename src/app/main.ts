@@ -50,8 +50,7 @@ function load_workers (mod: WebAssembly.Module) {
 			if (task_queue.peek()) {
 				const task = task_queue.deq()
 				worker.postMessage(task)
-			}
-			else {
+			} else {
 				// set global render_done variable to true
 				if (!render_done) {
 					render_done = true
@@ -86,7 +85,7 @@ function render () {
 	// START QUEUE
 	for (const worker of workers) {
 		if (task_queue.peek()) {
-			worker.postMessage(task_queue.deq_n(3))
+			worker.postMessage(task_queue.deq())
 		}
 	}
 }
