@@ -47,6 +47,10 @@ function calc_mandelbrot (
 	bot: number,
 	right: number
 ) {
+	// MOVEMENT OFFSETS
+	const OFFSET_X = -900
+	const OFFSET_Y = 200
+
 	/* number of pixels is pixels between vertex coordinates */
 	const pixel_num = (right - left) * (bot - top)
 

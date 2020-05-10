@@ -93,6 +93,7 @@ export function create_tasks (): Task[] {
 	const task_num_x = Math.ceil(config.px_width / task_len)
 	const task_num_y = Math.ceil(config.px_height / task_len)
 	const tasks = []
+	const OFFSET = 0
 
 	// MOST TASKS
 	for (let y = 0; y < task_num_y - 1; y++) {
@@ -101,7 +102,7 @@ export function create_tasks (): Task[] {
 				Task(
 					config.px_ax_len,
 					y * task_len - 1,
-					x * task_len - 1,
+					OFFSET + x * task_len - 1,
 					(y + 1) * task_len - 1,
 					(x + 1) * task_len - 1
 				)
@@ -114,7 +115,7 @@ export function create_tasks (): Task[] {
 			Task(
 				config.px_ax_len,
 				y * task_len - 1,
-				config.px_width - task_len,
+				OFFSET + config.px_width - task_len,
 				(y + 1) * task_len - 1,
 				config.px_width
 			)
@@ -126,7 +127,7 @@ export function create_tasks (): Task[] {
 			Task(
 				config.px_ax_len,
 				config.px_height - task_len,
-				x * task_len - 1,
+				OFFSET + x * task_len - 1,
 				config.px_height,
 				(x + 1) * task_len - 1
 			)
@@ -136,7 +137,7 @@ export function create_tasks (): Task[] {
 	const last_task = Task(
 		config.px_ax_len,
 		(task_num_y - 1) * task_len - 1,
-		(task_num_x - 1) * task_len - 1,
+		OFFSET + (task_num_x - 1) * task_len - 1,
 		config.px_height,
 		config.px_width
 	)

@@ -96,15 +96,15 @@ window.addEventListener('wheel', zoom_throttled(render), { passive: false })
 
 const test_evs = [ 'pointermove', 'pointerdown' ]
 for (const evname of test_evs) {
+	window.addEventListener(
+		evname,
+		(ev: TouchEvent) => {
+			console.log(evname)
+			ev.preventDefault()
+		},
+		{ passive: false }
+	)
 }
-window.addEventListener(
-	test_ev,
-	(ev: TouchEvent) => {
-		console.log(test_ev)
-		ev.preventDefault()
-	},
-	{ passive: false }
-)
 
 // MAIN ENTRY POINT
 wasm_has_compiled.then(function (mod) {
