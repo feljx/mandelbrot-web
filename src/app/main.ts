@@ -7,6 +7,7 @@ import { zoom_throttled } from './io'
 // DEBUG
 console.log(mandelbrot_url)
 console.log(config)
+const TIMING = false
 
 // GLOBALS
 const wasm_has_compiled = WebAssembly.compileStreaming(fetch(mandelbrot_url))
@@ -55,7 +56,7 @@ function load_workers (mod: WebAssembly.Module) {
 				if (!render_done) {
 					render_done = true
 					// DEBUG: end render time stopwatch
-					console.timeEnd()
+					TIMING && console.timeEnd()
 				}
 			}
 		}
@@ -73,7 +74,7 @@ function px_coord_to_idx () {}
 
 function render () {
 	// DEBUG: Measure time for each render
-	console.time()
+	TIMING && console.time()
 	// set global state calc_done to false
 	render_done = false
 	// clear task queue
@@ -91,7 +92,19 @@ function render () {
 }
 
 // EVENT LISTENERS
-window.addEventListener('wheel', zoom_throttled(render))
+window.addEventListener('wheel', zoom_throttled(render), { passive: false })
+
+const test_evs = [ 'pointermove', 'pointerdown' ]
+for (const evname of test_evs) {
+}
+window.addEventListener(
+	test_ev,
+	(ev: TouchEvent) => {
+		console.log(test_ev)
+		ev.preventDefault()
+	},
+	{ passive: false }
+)
 
 // MAIN ENTRY POINT
 wasm_has_compiled.then(function (mod) {

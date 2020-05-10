@@ -2,10 +2,11 @@ import throttle from './throttle'
 import debounce from './debounce'
 import { instance as config, zoom, move } from './config'
 
-const THROTTLE_DELAY = 100
+const THROTTLE_DELAY = 150
 
 export function zoom_throttled (callback: Function) {
 	return throttle(function (ev: WheelEvent) {
+		ev.preventDefault()
 		if (ev.deltaY < 0) {
 			// zoom in
 			zoom(config, config.zoom_fact + 1)

@@ -3,6 +3,8 @@ div {
 }
 canvas {
 	background: rgba(15, 26, 56, 0.98);
+	user-select: none;
+	touch-action: none;
 	/* border: 2px solid black; */
 }
 
