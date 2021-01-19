@@ -5,7 +5,13 @@ function rgb_to_hex (r: number, g: number, b: number) {
 const color_fractal = [ 80, 242, 196 ]
 const color_infinity = [ 11, 18, 43 ]
 
-const get_hex_color = get_color_fn(color_infinity, color_fractal)
+function get_hex_color (x: number) {
+	const p = 255 * x
+	const [ r, g, b ] = [ p ** 1, p ** 1, p ** 1 ]
+	return [ r, g, b, 0xff ]
+}
+
+// const get_hex_color = get_color_fn(color_infinity, color_fractal)
 
 function get_color_fn (color_1: number[], color_2: number[]) {
 	return function (n: number) {
@@ -48,8 +54,8 @@ function calc_mandelbrot (
 	right: number
 ) {
 	// MOVEMENT OFFSETS
-	const OFFSET_X = -900
-	const OFFSET_Y = 200
+	const OFFSET_X = 0.16305 * (2 / pixel_length)
+	const OFFSET_Y = 0.199974 * (2 / pixel_length)
 
 	/* number of pixels is pixels between vertex coordinates */
 	const pixel_num = (right - left) * (bot - top)
@@ -58,8 +64,8 @@ function calc_mandelbrot (
 	let is_black = true
 	const step = 3
 	// outer columns (constant x inside loop, iterate through all columns in column)
-	for (let y = top; y < bot; y += step) {
-		const xs = [ left, right - 1 ]
+	for (let y = top + OFFSET_Y; y < bot + OFFSET_Y; y += step) {
+		const xs = [ left + OFFSET_X, right - 1 + OFFSET_X ]
 		for (const x of xs) {
 			/* initial z = 0.0 + 0.0i */
 			let z_re = 0.0
@@ -92,8 +98,8 @@ function calc_mandelbrot (
 	}
 
 	// outer columns (constant y inside loop, iterate through all columns in column)
-	for (let x = left; x < right; x += step) {
-		const ys = [ top, bot - 1 ]
+	for (let x = left + OFFSET_X; x < right + OFFSET_X; x += step) {
+		const ys = [ top + OFFSET_Y, bot - 1 + OFFSET_Y ]
 		for (const y of ys) {
 			/* initial z = 0.0 + 0.0i */
 			let z_re = 0.0
@@ -141,8 +147,8 @@ function calc_mandelbrot (
 	const dim = (total_height / 2 - 1 + 0.5) * pixel_length - c_im_0
 	let pixel_idx = 0
 	/* loop through pixels in task */
-	for (let y = top; y < bot; y++) {
-		for (let x = left; x < right; x++) {
+	for (let y = top + OFFSET_Y; y < bot + OFFSET_Y; y++) {
+		for (let x = left + OFFSET_X; x < right + OFFSET_X; x++) {
 			/* initial z = 0.0 + 0.0i */
 			let z_re = 0.0
 			let z_im = 0.0
@@ -170,7 +176,7 @@ function calc_mandelbrot (
 			const rgba =
 				iter >= max_iter
 					? [ 0x00, 0x00, 0x00, 0xff ]
-					: get_hex_color(iter / max_iter * 30)
+					: get_hex_color(iter / max_iter * 10)
 			pixel_bytes[pixel_idx * 4] = rgba[0]
 			pixel_bytes[pixel_idx * 4 + 1] = rgba[1]
 			pixel_bytes[pixel_idx * 4 + 2] = rgba[2]

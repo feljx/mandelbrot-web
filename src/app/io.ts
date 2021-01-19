@@ -2,7 +2,7 @@ import throttle from './throttle'
 import debounce from './debounce'
 import { instance as config, zoom, move } from './config'
 
-const THROTTLE_DELAY = 150
+const THROTTLE_DELAY = 70
 
 export function zoom_throttled (callback: Function) {
 	return throttle(function (ev: WheelEvent) {

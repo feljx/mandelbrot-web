@@ -3,7 +3,7 @@ const BEEFY_DEVICE = navigator.hardwareConcurrency > 4
 const ITER_MAX = 2000
 const ZOOM_FACT = 1
 const WORKER_NUM = navigator.hardwareConcurrency * (BEEFY_DEVICE ? 2 : 1)
-const TASK_NUM = BEEFY_DEVICE ? 44 : 8
+const TASK_NUM = BEEFY_DEVICE ? 48 : 16
 const AXIS_LEN_Y = 4
 // Constructor args
 type ConstructorArgs = [number, number, number, number, number]
@@ -51,7 +51,7 @@ export class Config {
 export function zoom (c: Config, n: number) {
 	c.zoom_fact = n
 	c.px_ax_len = Math.abs(
-		c.axis_len_y / c.px_height / 1.16 ** (c.zoom_fact - 1)
+		c.axis_len_y / c.px_height / 1.16 ** ((c.zoom_fact - 1) * 2)
 	)
 }
 
