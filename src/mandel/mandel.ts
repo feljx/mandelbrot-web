@@ -6,8 +6,45 @@ const color_fractal = [ 80, 242, 196 ]
 const color_infinity = [ 11, 18, 43 ]
 
 function get_hex_color (x: number) {
-	const p = 255 * x
-	const [ r, g, b ] = [ p ** 1, p ** 1, p ** 1 ]
+	// const p = 255 * x
+	// const [ r, g, b ] = [ p ** 1, p ** 1, p ** 1 ]
+	const [ r, g, b ] = [
+		color_fractal[0] * x,
+		color_fractal[1] * x,
+		color_fractal[2] * x
+	]
+
+	return [ r, g, b, 0xff ]
+}
+
+const red = [ 181, 103, 117 ]
+const purple = [ 108, 103, 181 ]
+const blue = [ 110, 140, 196 ]
+const green = [ 47, 196, 162 ]
+const colors = [ blue, purple, blue, blue, green, red ]
+const scale_length = 1 / colors.length
+
+// THE PROPER WAY TO CALCULATE COLOR
+// IS TO GO IN FIXED LENGTH STEPS THAT REPRESENT
+// A COLOR SPECTRUM
+// SO INSTEAD OF CALCULATING A SIMPLE RATIO WITH iter AND max_iter, MAP ITER STEPS TO COLOR
+function HexColor (iter: number, iter_max: number) {
+	const mandelbrot_ratio = iter / iter_max
+	const scale = mandelbrot_ratio / scale_length
+	const scale_color_index = ~~scale
+	const color_start = colors[scale_color_index - 1] || colors[0]
+	const color_end = colors[scale_color_index] || colors[3]
+	const delta_factor = Number((scale + '').split('.')[1] || 0)
+	const color_delta = [
+		(color_end[0] - color_start[0]) * delta_factor,
+		(color_end[1] - color_start[1]) * delta_factor,
+		(color_end[2] - color_start[2]) * delta_factor
+	]
+	const [ r, g, b ] = [
+		color_start[0] + color_delta[0],
+		color_start[1] + color_delta[1],
+		color_start[2] + color_delta[2]
+	]
 	return [ r, g, b, 0xff ]
 }
 
@@ -173,10 +210,11 @@ function calc_mandelbrot (
 			}
 			/* if max iterations were passed, pixel is within mandelbrot set */
 			/* pixels within are black 0xff000000, pixels outside are colored relative to number of iterations */
+			// const scaling_factor = iter * 12 / max_iter
 			const rgba =
 				iter >= max_iter
 					? [ 0x00, 0x00, 0x00, 0xff ]
-					: get_hex_color(iter / max_iter * 10)
+					: HexColor(iter + 330, max_iter)
 			pixel_bytes[pixel_idx * 4] = rgba[0]
 			pixel_bytes[pixel_idx * 4 + 1] = rgba[1]
 			pixel_bytes[pixel_idx * 4 + 2] = rgba[2]

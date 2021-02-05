@@ -32,8 +32,10 @@ function load_workers (mod: WebAssembly.Module) {
 		const worker = new Worker('./worker.ts', { type: 'module' })
 
 		// WORKER CALLBACK
+		// EXECUTE TASKS
 		function handle_msg (ev) {
 			const task: Task = ev.data
+			// if
 			if (task.px_ax_len === config.px_ax_len) {
 				window.requestAnimationFrame(function () {
 					context.putImageData(
@@ -51,7 +53,8 @@ function load_workers (mod: WebAssembly.Module) {
 			if (task_queue.peek()) {
 				const task = task_queue.deq()
 				worker.postMessage(task)
-			} else {
+			}
+			else {
 				// set global render_done variable to true
 				if (!render_done) {
 					render_done = true
@@ -94,17 +97,17 @@ function render () {
 // EVENT LISTENERS
 window.addEventListener('wheel', zoom_throttled(render), { passive: false })
 
-const test_evs = [ 'pointermove', 'pointerdown' ]
-for (const evname of test_evs) {
-	window.addEventListener(
-		evname,
-		(ev: TouchEvent) => {
-			console.log(evname)
-			ev.preventDefault()
-		},
-		{ passive: false }
-	)
-}
+// const test_evs = [ 'pointermove', 'pointerdown' ]
+// for (const evname of test_evs) {
+// 	window.addEventListener(
+// 		evname,
+// 		(ev: TouchEvent) => {
+// 			console.log(evname)
+// 			ev.preventDefault()
+// 		},
+// 		{ passive: false }
+// 	)
+// }
 
 // MAIN ENTRY POINT
 wasm_has_compiled.then(function (mod) {
